@@ -1,0 +1,1 @@
+package com.example.reakageapp.screensimport androidx.compose.material3.Textimport androidx.compose.runtime.Composableimport androidx.navigation.NavController@Composablefun ReportScreen(navController: NavController) {    Text("Report Screen - Form for water leakage/quality")}
