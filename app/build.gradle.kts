@@ -1,7 +1,12 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.compose) // Ensure this is correct
+}
+
+repositories {
+    google()
+    mavenCentral()
 }
 
 android {
@@ -40,22 +45,22 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.navigation.runtime.ktx)
-    implementation(libs.androidx.navigation.compose)
+    implementation(platform(libs.androidx.compose.bom)) // BOM for Compose
+    implementation(libs.androidx.compose.ui) // Compose UI
+    implementation(libs.androidx.compose.ui.graphics) // Compose UI Graphics
+    implementation(libs.androidx.compose.ui.tooling.preview) // Compose Preview
+    implementation(libs.androidx.material3) // Material3
+    implementation(libs.androidx.navigation.runtime.ktx) // Navigation
+    implementation(libs.androidx.navigation.compose) // Navigation Compose
+    implementation("io.coil-kt:coil-compose:2.0.0") // Coil for image loading
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+    androidTestImplementation(platform(libs.androidx.compose.bom)) // BOM for testing
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4) // Compose UI Testing
+    debugImplementation(libs.androidx.compose.ui.tooling) // Debugging tools
+    debugImplementation(libs.androidx.compose.ui.test.manifest) // Manifest for testing
 }
