@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "171300395882",
+    "project_id": "leakageapp",
+    "storage_bucket": "leakageapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:171300395882:android:dbb5e9fbd9e62e3031e313",
+        "android_client_info": {
+          "package_name": "com.example.reakageapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "171300395882-3b5haptii52r9ekij6c5illlt645m9l7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyXeQ-AqW3eQy4FrtUioGDJ0RzgvJbjbo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "171300395882-3b5haptii52r9ekij6c5illlt645m9l7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

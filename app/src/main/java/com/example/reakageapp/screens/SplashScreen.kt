@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -14,16 +16,32 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.reakageapp.R
+import com.example.reakageapp.presentation.auth.AuthViewModel
+import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(navController: NavController) {
-    // Simulate a delay for splash screen (e.g., 2 seconds), then navigate to login
-    LaunchedEffect(Unit) {
-        kotlinx.coroutines.delay(2000L)
-        navController.navigate("login") {
-            popUpTo("splash") { inclusive = true }
+fun SplashScreen(navController: NavController, authViewModel: AuthViewModel = viewModel()) {
+    val authState by authViewModel.authState.collectAsState()
+
+    LaunchedEffect(Unit, authState) { // Relaunch if authState changes before delay finishes (though unlikely here)
+        delay(2000L) // Splash screen delay
+
+        // The initial check in AuthViewModel's init block should have updated the user state.
+        // If still loading, wait a bit more (though ideally, init check is fast)
+        // However, for splash, we usually just check the current state after delay.
+        // The `isLoading` in authState refers to ongoing operations, not initial check.
+
+        if (authState.user != null) {
+            navController.navigate("home") {
+                popUpTo("splash") { inclusive = true }
+            }
+        } else {
+            navController.navigate("login") {
+                popUpTo("splash") { inclusive = true }
+            }
         }
     }
 
@@ -46,22 +64,19 @@ fun SplashScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // Water drop icon (replace with your drawable resource)
             Image(
-                painter = painterResource(id = R.drawable.water), // Add your water drop image to res/drawable
+                painter = painterResource(id = R.drawable.water),
                 contentDescription = "Water Drop Icon",
                 modifier = Modifier
                     .size(120.dp)
                     .padding(bottom = 24.dp)
             )
-
             Text(
                 text = "Water Watch",
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
             )
-
             Text(
                 text = "Water Issues Reporting App",
                 fontSize = 18.sp,
