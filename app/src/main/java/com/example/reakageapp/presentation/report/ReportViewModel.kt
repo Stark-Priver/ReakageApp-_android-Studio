@@ -73,6 +73,7 @@ class ReportViewModel : ViewModel() {
     fun submitReport(
         description: String,
         location: String,
+        severity: String, // Added severity parameter
         imageUri: Uri?
     ) {
         viewModelScope.launch {
@@ -112,13 +113,22 @@ class ReportViewModel : ViewModel() {
                     description = description,
                     photoUrl = imageUrl,
                     // timestamp is handled by ServerValue.TIMESTAMP in the model's default
-                    status = "submitted"
+                    status = "submitted",
+                    severity = severity // Added severity
                 )
 
-                database.child(reportId).setValue(report).await()
-                _submissionState.value = ReportSubmissionState(isSuccess = true)
+                try {
+                    database.child(reportId).setValue(report).await()
+                    _submissionState.value = ReportSubmissionState(isSuccess = true)
+                } catch (dbError: com.google.firebase.database.DatabaseException) {
+                    // More specific error logging for database write failures
+                    android.util.Log.e("ReportViewModel", "Firebase Database Error: ${dbError.message}", dbError)
+                    _submissionState.value = ReportSubmissionState(error = "Database submission failed: ${dbError.message}")
+                }
 
             } catch (e: Exception) {
+                // General error logging
+                android.util.Log.e("ReportViewModel", "General Submission Error: ${e.message}", e)
                 _submissionState.value = ReportSubmissionState(error = "Submission failed: ${e.message}")
             }
         }
