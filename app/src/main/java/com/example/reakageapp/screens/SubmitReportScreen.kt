@@ -29,6 +29,9 @@ fun SubmitReportScreen(
     var description by remember { mutableStateOf("") }
     var location by remember { mutableStateOf("") }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
+    val severityOptions = listOf("Low", "Medium", "High")
+    var selectedSeverity by remember { mutableStateOf(severityOptions[0]) }
+    var expandedSeverityDropdown by remember { mutableStateOf(false) }
 
     val submissionState by reportViewModel.submissionState.collectAsState()
     val context = LocalContext.current
@@ -95,6 +98,38 @@ fun SubmitReportScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
+            // Severity Dropdown
+            ExposedDropdownMenuBox(
+                expanded = expandedSeverityDropdown,
+                onExpandedChange = { expandedSeverityDropdown = !expandedSeverityDropdown },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                OutlinedTextField(
+                    value = selectedSeverity,
+                    onValueChange = {}, // Not directly changing here
+                    readOnly = true,
+                    label = { Text("Severity") },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedSeverityDropdown) },
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth()
+                )
+                ExposedDropdownMenu(
+                    expanded = expandedSeverityDropdown,
+                    onDismissRequest = { expandedSeverityDropdown = false }
+                ) {
+                    severityOptions.forEach { selectionOption ->
+                        DropdownMenuItem(
+                            text = { Text(selectionOption) },
+                            onClick = {
+                                selectedSeverity = selectionOption
+                                expandedSeverityDropdown = false
+                            }
+                        )
+                    }
+                }
+            }
+
             Button(onClick = {
                 if (readPermissionState.hasPermission) {
                     imagePickerLauncher.launch("image/*")
@@ -122,7 +157,7 @@ fun SubmitReportScreen(
             Button(
                 onClick = {
                     if (description.isNotBlank() && location.isNotBlank()) {
-                        reportViewModel.submitReport(description, location, imageUri)
+                        reportViewModel.submitReport(description, location, selectedSeverity, imageUri)
                     } else {
                         // Show snackbar for empty fields
                         // This can be done by setting an error in a local state or viewmodel

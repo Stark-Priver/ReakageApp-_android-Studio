@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.services) // Added
+    alias(libs.plugins.hilt)
+    id("kotlin-kapt")
 }
 
 android {
@@ -64,6 +66,11 @@ dependencies {
     implementation(libs.firebase.auth.ktx)         // Firebase Authentication
     implementation(libs.firebase.database.ktx)    // Firebase Realtime Database
     implementation(libs.firebase.storage.ktx)     // Firebase Storage
+    implementation(libs.kotlinx.coroutines.play.services) // For Firebase await()
+
+    // Hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
