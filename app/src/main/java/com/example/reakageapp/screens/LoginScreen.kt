@@ -162,12 +162,10 @@ fun LoginScreen(navController: NavController, authViewModel: AuthViewModel = vie
                     ) {
                         Text("Sign Up", color = MaterialTheme.colorScheme.onSecondary) // Use theme colors
                     }
-                    Spacer(modifier = Modifier.height(16.dp))
-                    // Placeholder, functionality not yet implemented
+
                 }
             }
         }
     }
 }
-
 

@@ -1,51 +1,34 @@
 [versions]
+accompanistPermissions = "0.37.3"
 agp = "8.7.3"
 kotlin = "2.1.0"
-
-composeBom = "2024.12.01"
 coreKtx = "1.15.0"
-activityCompose = "1.9.3"
-material3 = "1.2.1"
-coil = "2.7.0"
-
-navigationRuntimeKtx = "2.8.4"
-navigationCompose = "2.8.4"
-lifecycleRuntimeKtx = "2.8.7"
-
-googleServicesPlugin = "4.4.2"
-firebaseBom = "33.1.1"
-firebaseAuthKtx = "23.0.0"
-firebaseDatabaseKtx = "21.0.0"
-firebaseStorageKtx = "21.0.0"
-
-accompanistPermissions = "0.37.3"
-
-playServicesLocation = "21.3.0"
-
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-
-hilt = "2.48"
-coroutinesPlayServices = "1.7.3"
-
-
-[plugins]
-android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-google-services = { id = "com.google.gms.google-services", version.ref = "googleServicesPlugin" }
-hilt = { id = "dagger.hilt.android.plugin", version.ref = "hilt" }
-kapt = { id = "org.jetbrains.kotlin.kapt" }  # No version specified as kapt is bundled with Kotlin plugin
-
+lifecycleRuntimeKtx = "2.8.7"
+activityCompose = "1.9.3"
+composeBom = "2024.12.01"
+navigationRuntimeKtx = "2.8.4"
+navigationCompose = "2.8.4"
+coil = "2.7.0"
+playServicesLocation = "21.3.0"
+googleServicesPlugin = "4.4.2" # Added
+firebaseBom = "33.1.1" # Added
+firebaseAuthKtx = "23.0.0" # Added
+firebaseDatabaseKtx = "21.0.0" # Added
+firebaseStorageKtx = "21.0.0" # Added
+hilt = "2.51.1" # Added
+kotlinxCoroutinesPlayServices = "1.8.1" # Added
 
 [libraries]
-# Core
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-
-# Compose
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
@@ -53,35 +36,24 @@ androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
-
-# Navigation
+androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationRuntimeKtx" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
-
-# Accompanist
-accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanistPermissions" }
-
-# Coil
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
-
-# Google Play Services
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
-
 # Firebase
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 firebase-database-ktx = { group = "com.google.firebase", name = "firebase-database-ktx", version.ref = "firebaseDatabaseKtx" }
 firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx", version.ref = "firebaseStorageKtx" }
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" } # Added
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" } # Added
+kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutinesPlayServices" } # Added
 
-# Hilt
-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 
-# Coroutines for Firebase
-kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "coroutinesPlayServices" }
-
-# Testing
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServicesPlugin" } # Added
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" } # Added

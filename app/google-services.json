@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "171300395882",
+    "firebase_url": "https://leakageapp-default-rtdb.firebaseio.com",
     "project_id": "leakageapp",
     "storage_bucket": "leakageapp.firebasestorage.app"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "171300395882-o87hga9gju766ivta3p089essvov3rf6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.reakageapp",
+            "certificate_hash": "5067683ae8a3ce5f603eb678688294147d8be20f"
+          }
+        },
         {
           "client_id": "171300395882-3b5haptii52r9ekij6c5illlt645m9l7.apps.googleusercontent.com",
           "client_type": 3
