@@ -1,1 +1,165 @@
-@file:OptIn(ExperimentalMaterial3Api::class)package com.example.reakageapp.screensimport android.net.Uriimport androidx.activity.compose.rememberLauncherForActivityResultimport androidx.activity.result.PickVisualMediaRequestimport androidx.activity.result.contract.ActivityResultContractsimport androidx.compose.foundation.backgroundimport androidx.compose.foundation.layout.*import androidx.compose.foundation.lazy.LazyColumnimport androidx.compose.foundation.lazy.itemsimport androidx.compose.foundation.shape.RoundedCornerShapeimport androidx.compose.material3.*import androidx.compose.runtime.*import androidx.compose.ui.Alignmentimport androidx.compose.ui.Modifierimport androidx.compose.ui.draw.clipimport androidx.compose.ui.draw.shadowimport androidx.compose.ui.graphics.Brushimport androidx.compose.ui.graphics.Colorimport androidx.compose.ui.layout.ContentScaleimport androidx.compose.ui.text.font.FontWeightimport androidx.compose.ui.text.input.TextFieldValueimport androidx.compose.ui.unit.dpimport androidx.compose.ui.unit.spimport androidx.navigation.NavControllerimport coil.compose.AsyncImageimport com.example.reakageapp.components.GlassCard@Composablefun ReportListScreen(navController: NavController) {    // Mock data for user-submitted reports    val reports = remember {        mutableStateListOf(            Report(                id = "R001",                severity = "High",                area = "Mbeya City Center",                description = "Severe water leakage near the market, causing flooding.",                imageUri = null,                status = "In Progress"            ),            Report(                id = "R002",                severity = "Medium",                area = "Utengule Coffee Farm",                description = "Water quality issue reported, brownish water supply.",                imageUri = null,                status = "Resolved"            ),            Report(                id = "R003",                severity = "Low",                area = "Igawilo Ward",                description = "Minor pipe burst, affecting a few households.",                imageUri = null,                status = "Viewed"            ),            Report(                id = "R004",                severity = "High",                area = "Mbalizi Town",                description = "Contamination detected in the local water tank.",                imageUri = null,                status = "Not Attended"            )        )    }    Box(        modifier = Modifier            .fillMaxSize()            .background(Brush.verticalGradient(listOf(Color(0xFF0D47A1), Color(0xFF42A5F5))))    ) {        GlassCard(            modifier = Modifier                .fillMaxSize()                .align(Alignment.Center)                .padding(16.dp)                .shadow(8.dp, RoundedCornerShape(16.dp))        ) {            Column(                modifier = Modifier                    .padding(24.dp)                    .fillMaxSize(),                horizontalAlignment = Alignment.CenterHorizontally,                verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Top)            ) {                Text(                    text = "My Submitted Reports",                    style = MaterialTheme.typography.headlineLarge.copy(                        color = Color.White,                        fontWeight = FontWeight.Bold,                        fontSize = 32.sp                    ),                    modifier = Modifier.padding(bottom = 16.dp)                )                LazyColumn(                    modifier = Modifier                        .fillMaxWidth()                        .weight(1f),                    verticalArrangement = Arrangement.spacedBy(12.dp)                ) {                    items(reports) { report ->                        var localSeverity by remember { mutableStateOf(report.severity) }                        var localArea by remember { mutableStateOf(report.area) }                        var localDescription by remember { mutableStateOf(report.description) }                        var localStatus by remember { mutableStateOf(report.status) }                        var localImageUri by remember { mutableStateOf<Uri?>(report.imageUri) }                        var isEditing by remember { mutableStateOf(false) }                        val pickImageLauncher = rememberLauncherForActivityResult(                            contract = ActivityResultContracts.PickVisualMedia()                        ) { uri: Uri? ->                            if (uri != null) {                                localImageUri = uri                            }                        }                        Card(                            modifier = Modifier                                .fillMaxWidth()                                .clip(RoundedCornerShape(12.dp))                                .shadow(4.dp, RoundedCornerShape(12.dp)),                            colors = CardDefaults.cardColors(containerColor = Color.White)                        ) {                            Column(                                modifier = Modifier                                    .padding(16.dp)                                    .fillMaxWidth()                            ) {                                if (isEditing) {                                    var expanded by remember { mutableStateOf(false) }                                    val severities = listOf("Low", "Medium", "High")                                    ExposedDropdownMenuBox(                                        expanded = expanded,                                        onExpandedChange = { expanded = !expanded }                                    ) {                                        OutlinedTextField(                                            value = localSeverity,                                            onValueChange = { localSeverity = it },                                            label = { Text("Severity") },                                            modifier = Modifier                                                .fillMaxWidth()                                                .menuAnchor()                                                .clip(RoundedCornerShape(8.dp)),                                            readOnly = true,                                            colors = TextFieldDefaults.colors(                                                focusedContainerColor = Color.White,                                                unfocusedContainerColor = Color.White,                                                focusedIndicatorColor = Color(0xFF1565C0),                                                unfocusedIndicatorColor = Color(0xFF90CAF9)                                            ),                                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) }                                        )                                        ExposedDropdownMenu(                                            expanded = expanded,                                            onDismissRequest = { expanded = false }                                        ) {                                            severities.forEach { severity ->                                                DropdownMenuItem(                                                    text = { Text(severity) },                                                    onClick = {                                                        localSeverity = severity                                                        expanded = false                                                    }                                                )                                            }                                        }                                    }                                    OutlinedTextField(                                        value = TextFieldValue(localArea),                                        onValueChange = { localArea = it.text },                                        label = { Text("Area") },                                        modifier = Modifier                                            .fillMaxWidth()                                            .padding(top = 8.dp)                                            .clip(RoundedCornerShape(8.dp)),                                        colors = TextFieldDefaults.colors(                                            focusedContainerColor = Color.White,                                            unfocusedContainerColor = Color.White,                                            focusedIndicatorColor = Color(0xFF1565C0),                                            unfocusedIndicatorColor = Color(0xFF90CAF9)                                        )                                    )                                    OutlinedTextField(                                        value = TextFieldValue(localDescription),                                        onValueChange = { localDescription = it.text },                                        label = { Text("Description") },                                        modifier = Modifier                                            .fillMaxWidth()                                            .padding(top = 8.dp)                                            .clip(RoundedCornerShape(8.dp)),                                        colors = TextFieldDefaults.colors(                                            focusedContainerColor = Color.White,                                            unfocusedContainerColor = Color.White,                                            focusedIndicatorColor = Color(0xFF1565C0),                                            unfocusedIndicatorColor = Color(0xFF90CAF9)                                        ),                                        maxLines = 3                                    )                                    Button(                                        onClick = { pickImageLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },                                        modifier = Modifier                                            .fillMaxWidth()                                            .padding(top = 8.dp)                                            .clip(RoundedCornerShape(8.dp)),                                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1E88E5))                                    ) {                                        Text("Upload Image", color = Color.White, fontSize = 14.sp)                                    }                                    if (localImageUri != null) {                                        AsyncImage(                                            model = localImageUri,                                            contentDescription = "Updated Report Image",                                            modifier = Modifier                                                .fillMaxWidth()                                                .height(150.dp)                                                .clip(RoundedCornerShape(8.dp))                                                .padding(top = 8.dp),                                            contentScale = ContentScale.Crop                                        )                                    }                                    Row(                                        modifier = Modifier                                            .fillMaxWidth()                                            .padding(top = 8.dp),                                        horizontalArrangement = Arrangement.spacedBy(8.dp)                                    ) {                                        Button(                                            onClick = {                                                isEditing = false                                                val index = reports.indexOf(report)                                                if (index != -1) {                                                    reports[index] = report.copy(                                                        severity = localSeverity,                                                        area = localArea,                                                        description = localDescription,                                                        imageUri = localImageUri,                                                        status = localStatus                                                    )                                                }                                            },                                            modifier = Modifier                                                .weight(1f)                                                .clip(RoundedCornerShape(8.dp)),                                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF42A5F5))                                        ) {                                            Text("Save Changes", color = Color.White, fontSize = 14.sp)                                        }                                        Button(                                            onClick = { isEditing = false },                                            modifier = Modifier                                                .weight(1f)                                                .clip(RoundedCornerShape(8.dp)),                                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF757575))                                        ) {                                            Text("Cancel", color = Color.White, fontSize = 14.sp)                                        }                                    }                                } else {                                    Text(                                        text = "Report ID: ${report.id}",                                        style = MaterialTheme.typography.titleMedium.copy(                                            fontWeight = FontWeight.SemiBold,                                            color = Color(0xFF1565C0)                                        )                                    )                                    Spacer(modifier = Modifier.height(4.dp))                                    Text(                                        text = "Severity: ${report.severity}",                                        style = MaterialTheme.typography.bodyMedium.copy(                                            color = Color.Black.copy(alpha = 0.8f)                                        )                                    )                                    Text(                                        text = "Area: ${report.area}",                                        style = MaterialTheme.typography.bodyMedium.copy(                                            color = Color.Black.copy(alpha = 0.8f)                                        )                                    )                                    Spacer(modifier = Modifier.height(4.dp))                                    Text(                                        text = "Description: ${report.description}",                                        style = MaterialTheme.typography.bodyMedium.copy(                                            color = Color.Black.copy(alpha = 0.7f)                                        )                                    )                                    if (report.imageUri != null) {                                        AsyncImage(                                            model = report.imageUri,                                            contentDescription = "Report Image",                                            modifier = Modifier                                                .fillMaxWidth()                                                .height(150.dp)                                                .clip(RoundedCornerShape(8.dp))                                                .padding(top = 8.dp),                                            contentScale = ContentScale.Crop                                        )                                    }                                    Text(                                        text = "Status: $localStatus",                                        style = MaterialTheme.typography.bodyMedium.copy(                                            color = if (localStatus == "Not Attended") Color.Red else Color.Green                                        ),                                        modifier = Modifier.padding(top = 4.dp)                                    )                                    if (report.status == "Not Attended") {                                        Button(                                            onClick = { isEditing = true },                                            modifier = Modifier                                                .fillMaxWidth()                                                .padding(top = 8.dp)                                                .clip(RoundedCornerShape(8.dp)),                                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1565C0))                                        ) {                                            Text("Edit Report", color = Color.White, fontSize = 14.sp)                                        }                                    }                                }                                if (localStatus != "Resolved" && !isEditing) {                                    Button(                                        onClick = {                                            localStatus = "Not Attended"                                            val index = reports.indexOf(report)                                            if (index != -1) {                                                reports[index] = report.copy(status = localStatus)                                            }                                        },                                        modifier = Modifier                                            .fillMaxWidth()                                            .padding(top = 8.dp)                                            .clip(RoundedCornerShape(8.dp)),                                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1565C0))                                    ) {                                        Text("Update to Not Attended", color = Color.White, fontSize = 14.sp)                                    }                                }                            }                        }                    }                }            }        }    }}// Data class to represent a reportdata class Report(    val id: String,    val severity: String,    val area: String,    val description: String,    val imageUri: Uri?,    val status: String)
+package com.example.reakageapp.screens
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import com.example.reakageapp.data.model.Report // Import the correct Report data class
+import com.example.reakageapp.presentation.report.ReportViewModel
+import com.example.reakageapp.components.GlassCard
+import java.text.SimpleDateFormat
+import java.util.*
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ReportListScreen(
+    navController: NavController,
+    reportViewModel: ReportViewModel = viewModel() // Use the shared ViewModel
+) {
+    val userReportsState by reportViewModel.userReportsState.collectAsState()
+
+    // Function to format timestamp to a readable date string
+    fun formatDate(timestamp: Any): String {
+        if (timestamp !is Long || timestamp == 0L) return "N/A"
+        val sdf = SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault())
+        return sdf.format(Date(timestamp))
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Brush.verticalGradient(listOf(Color(0xFF0D47A1), Color(0xFF42A5F5))))
+    ) {
+        GlassCard(
+            modifier = Modifier
+                .fillMaxSize()
+                .align(Alignment.Center)
+                .padding(16.dp)
+                .shadow(8.dp, RoundedCornerShape(16.dp))
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp) // Reduced padding for more content space
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "My Submitted Reports",
+                    style = MaterialTheme.typography.headlineMedium.copy( // Adjusted size
+                        color = Color.White, // Assuming GlassCard provides a dark enough backdrop or use a themed color
+                        fontWeight = FontWeight.Bold
+                    ),
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+
+                when {
+                    userReportsState.isLoading -> {
+                        CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                    }
+                    userReportsState.error != null -> {
+                        Text(
+                            text = "Error: ${userReportsState.error}",
+                            color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
+                    }
+                    userReportsState.reports.isEmpty() -> {
+                        Text(
+                            text = "No reports submitted yet.",
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
+                    }
+                    else -> {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            items(userReportsState.reports) { report ->
+                                ReportListItem(report = report, ::formatDate)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ReportListItem(report: Report, formatDate: (Any) -> String) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .shadow(4.dp, RoundedCornerShape(12.dp)), // Added shadow for better depth
+        colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.8f)) // Slightly transparent white
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth()
+        ) {
+            report.photoUrl?.let {
+                AsyncImage(
+                    model = it,
+                    contentDescription = "Report Image",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(180.dp) // Increased height for better image display
+                        .clip(RoundedCornerShape(8.dp))
+                        .padding(bottom = 8.dp),
+                    contentScale = ContentScale.Crop
+                )
+            }
+            Text(
+                text = "Description: ${report.description}",
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
+            Text(
+                text = "Location: ${report.location}",
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
+            Text(
+                text = "Status: ${report.status}",
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = when (report.status.lowercase(Locale.getDefault())) {
+                        "submitted" -> Color(0xFFFFA000) // Orange
+                        "in progress" -> Color(0xFF1976D2) // Blue
+                        "resolved" -> Color(0xFF388E3C) // Green
+                        else -> Color.Gray
+                    }
+                ),
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
+            Text(
+                text = "Date: ${formatDate(report.timestamp)}",
+                style = MaterialTheme.typography.bodySmall,
+                color = Color.Gray
+            )
+            // Add other report details as needed (e.g., reportId for debugging)
+            // Text("ID: ${report.reportId}", style = MaterialTheme.typography.bodySmall)
+        }
+    }
+}
