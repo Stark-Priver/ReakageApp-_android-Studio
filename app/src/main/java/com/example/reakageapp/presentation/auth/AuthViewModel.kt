@@ -8,6 +8,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 data class AuthState(
     val isLoading: Boolean = false,
@@ -15,9 +17,10 @@ data class AuthState(
     val error: String? = null
 )
 
-class AuthViewModel : ViewModel() {
-
-    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+@HiltViewModel
+class AuthViewModel @Inject constructor(
+    private val auth: FirebaseAuth
+) : ViewModel() {
 
     private val _authState = MutableStateFlow(AuthState(isLoading = true))
     val authState: StateFlow<AuthState> = _authState
