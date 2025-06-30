@@ -1,7 +1,8 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.plugin.compose")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.google.services) // Added
 }
 
 android {
@@ -57,6 +58,12 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.coil.compose)
     implementation(libs.play.services.location)
+
+    // Firebase
+    implementation(platform(libs.firebase.bom)) // Firebase BOM
+    implementation(libs.firebase.auth.ktx)         // Firebase Authentication
+    implementation(libs.firebase.database.ktx)    // Firebase Realtime Database
+    implementation(libs.firebase.storage.ktx)     // Firebase Storage
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
